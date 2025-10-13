@@ -163,7 +163,7 @@ export default function SignIn() {
                         {
                           onSuccess(context) {
                             setLoadingAction(null);
-                            toast.success("Successfully signed in");
+                            toast.success("Successfully signed in. Redirecting...");
                             router.push(getCallbackURL(params));
                           },
                           onError(ctx) {
