@@ -85,11 +85,11 @@ const data = {
       url: "/dashboard/notes",
       icon: FileUserIcon,
     },
-    {
-      title: "Medical Conditions",
-      url: "/dashboard/conditions",
-      icon: HeartPulse,
-    },
+    // {
+    //   title: "Medical Conditions",
+    //   url: "/dashboard/conditions",
+    //   icon: HeartPulse,
+    // },
   ],
   projects: [
     {

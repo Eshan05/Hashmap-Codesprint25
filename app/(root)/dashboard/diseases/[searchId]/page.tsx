@@ -11,6 +11,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import DiseaseSearch from '@/models/disease-search';
 import type { DiseaseSearchParsed, LLMDiseasePayload } from '@/types/disease-search';
@@ -18,13 +25,18 @@ import dbConnect from '@/utils/db-conn';
 import {
   AlertTriangle,
   ArrowRight,
+  BookmarkPlus,
   BookOpen,
   ClipboardList,
   Clock,
+  Download,
+  FileText,
   Gauge,
   HeartPulse,
   LifeBuoy,
+  ListChecks,
   Microscope,
+  Share2,
   ShieldAlert,
   Sparkles,
   Stethoscope,
@@ -101,15 +113,16 @@ function ReportView({ search, payload }: { search: DiseaseSearchParsed; payload:
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-gradient-to-b from-background via-background to-background">
-      <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-10">
+      <div className="mx-auto w-full px-4 pb-16 pt-10 sm:px-6 lg:px-10">
         <ReportHero search={search} createdAt={createdAt} duration={duration} />
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(280px,1fr)]">
+        <div className="grid gap-6  max-w-6xl mx-auto lg:grid-cols-[minmax(0,2fr),minmax(280px,1fr)]">
           <article className="space-y-6">
             <PatientPrimer payload={payload} />
             <Essentials payload={payload} />
             <TrajectoryOverview payload={payload} />
             <CareGuidance payload={payload} />
+            <FollowUpChecklist payload={payload} />
             <ClinicalInsights payload={payload} />
           </article>
           <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
@@ -132,7 +145,15 @@ function ReportHero({
   duration: string | null;
 }) {
   return (
-    <Card className="relative mb-12 overflow-hidden border border-border/60 bg-[rgba(248,249,251,0.92)] shadow-2xl backdrop-blur-xl dark:bg-[rgba(19,20,24,0.92)]">
+    <Card className="overflow-hidden border border-border/60 shadow-2xl py-0 max-w-7xl mx-auto mb-8 bg-center-bottom"
+      style={{
+        background:
+          'url(https://images.unsplash.com/photo-1655392698483-7360a36e59bd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* https://images.unsplash.com/photo-1760224255774-66b3ab88bd83?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1932 */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(110,231,183,0.2),_transparent_50%),radial-gradient(circle_at_bottom_right,_rgba(59,130,246,0.2),_transparent_45%)]" />
       <CardContent className="flex flex-col gap-8 p-6 sm:p-8 md:p-10 lg:p-12">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -165,13 +186,44 @@ function ReportHero({
                 <Stethoscope className="h-4 w-4" />
                 Share with care team
               </Button>
+              {/* TODO: Connect to profile bookmarking once the health profile workflow is ready. */}
+              <Button variant="ghost" size="sm" className="gap-2">
+                <BookmarkPlus className="h-4 w-4" />
+                Add to health profile
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2 border border-border/40">
+                    <Share2 className="h-4 w-4" />
+                    Quick actions
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-60">
+                  {/* TODO: Wire these to export/share flows once services are available. */}
+                  <DropdownMenuItem className="gap-2">
+                    <Download className="h-4 w-4" />
+                    Download briefing (PDF)
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gap-2">
+                    <FileText className="h-4 w-4" />
+                    Export to care notes
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="gap-2">
+                    <Share2 className="h-4 w-4" />
+                    Share secure link
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <div className="w-full max-w-xs rounded-3xl border border-border/70 bg-background/80 p-5 shadow-lg backdrop-blur-xl">
             <div className="space-y-4 text-sm text-muted-foreground">
               <HeroStat icon={<Clock className="h-4 w-4" />} label="Generated" value={createdAt} />
               <HeroStat icon={<Microscope className="h-4 w-4" />} label="Focus" value={search.query} />
-              {duration ? <HeroStat icon={<Sparkles className="h-4 w-4" />} label="Model runtime" value={duration} /> : null}
+              {duration ? (
+                <HeroStat icon={<Sparkles className="h-4 w-4" />} label="Model runtime" value={duration} />
+              ) : null}
             </div>
           </div>
         </div>
@@ -495,6 +547,46 @@ function CareList({
         <p className="text-sm text-muted-foreground">Not specified.</p>
       )}
     </section>
+  );
+}
+
+function FollowUpChecklist({ payload }: { payload: LLMDiseasePayload }) {
+  const clinicianTalkingPoints = payload.medications?.slice(0, 3).map((item) => `Medication review: ${item}`) ?? [];
+  const lifestyleFocus = payload.lifestyleChanges?.slice(0, 3).map((item) => `Habit focus: ${item}`) ?? [];
+  const preventionFocus = payload.preventionStrategies?.slice(0, 3).map((item) => `Prevention: ${item}`) ?? [];
+
+  const narrative = payload.treatmentSummary ||
+    'Use this briefing to outline a personalised plan with your clinician and capture any agreed next steps.';
+
+  const actionItems = [...clinicianTalkingPoints, ...lifestyleFocus, ...preventionFocus].filter(Boolean);
+
+  return (
+    <Card className="border border-border/60 bg-background/90 shadow-lg">
+      <CardHeader className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <CardTitle className="text-xl">Next follow-up checklist</CardTitle>
+          <CardDescription>
+            Take these prompts into your next appointment or journal to stay on top of progress.
+          </CardDescription>
+        </div>
+        <ListChecks className="h-5 w-5 text-primary" />
+      </CardHeader>
+      <CardContent className="space-y-4 text-sm text-muted-foreground">
+        <p className="leading-relaxed text-foreground/80">{narrative}</p>
+        {actionItems.length ? (
+          <ul className="space-y-2">
+            {actionItems.map((item, index) => (
+              <li key={index} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No immediate follow-up actions were highlighted. Consider logging symptom changes for your next visit.</p>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
