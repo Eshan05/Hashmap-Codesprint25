@@ -98,15 +98,15 @@ const data = {
       icon: Frame,
     },
     {
-      name: "Statistics",
-      url: "/dashboard/stats",
-      icon: PieChart,
-    },
-    {
       name: "Glossary & FAQs",
       url: "/glossary",
       icon: Map,
     },
+    {
+      name: "Contact Support",
+      url: "/support",
+      icon: Wrench,
+    }
   ],
 }
 
