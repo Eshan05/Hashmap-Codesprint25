@@ -13,7 +13,68 @@ import { RecentSearch } from '@/types/recent-search';
 import { useQuery } from '@tanstack/react-query';
 import { ClockIcon, FileQuestionIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
-const SymptomFormMain = dynamic(() => import('./_components/symptom-form-main'), { ssr: false });
+import { Skeleton } from '@/components/ui/skeleton';
+
+function SymptomFormSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="lg:grid lg:grid-cols-3 gap-2">
+        <div className="space-y-3 p-1">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+          <Skeleton className="h-5 w-28" />
+          <Skeleton className="h-4 w-48 hidden lg:block" />
+        </div>
+        <div className="lg:col-span-2 p-1">
+          <Skeleton className="h-32 w-full" />
+        </div>
+      </div>
+
+      <div className="lg:grid lg:grid-cols-3 gap-2">
+        <div className="space-y-3 p-1">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-4 w-28" />
+          </div>
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <div className="lg:col-span-2 p-1">
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+
+      <div className="lg:grid lg:grid-cols-3 gap-2">
+        <div className="space-y-3 p-1">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <div className="lg:col-span-2 p-1">
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-10 w-24" />
+          <Skeleton className="h-10 w-36" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-48" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SymptomFormMain = dynamic(() => import('./_components/symptom-form-main'), {
+  ssr: false,
+  loading: SymptomFormSkeleton,
+});
 
 const fetchRecentSearches = async (): Promise<RecentSearch[]> => {
   const response = await fetch('/api/v1/symptoms/recent');

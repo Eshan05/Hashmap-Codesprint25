@@ -104,10 +104,10 @@ export default async function MedicineSearchResultPage({ params }: PageProps) {
 
   return (
     <section className="relative min-h-svh overflow-hidden bg-gradient-to-b from-background via-background to-background">
-      <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-10">
+      <div className="mx-auto w-full px-4 pb-16 pt-10 sm:px-6 lg:px-10">
         <ReportHero search={search} />
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(280px,1fr)]">
+        <div className="grid max-w-6xl mx-auto gap-6 lg:grid-cols-[minmax(0,2fr),minmax(280px,1fr)]">
           <article className="space-y-6">
             <CommonInsights search={search} />
             <ModeSpecific mode={mode} payload={search.modeSpecific} />
@@ -161,7 +161,14 @@ function ReportHero({ search }: { search: MedicineSearchParsed }) {
   const duration = typeof search.duration === 'number' ? `${(search.duration / 1000).toFixed(1)}s` : null;
 
   return (
-    <Card className="relative mb-12 overflow-hidden border border-border/60 bg-[rgba(248,249,251,0.9)] shadow-2xl backdrop-blur-xl dark:bg-[rgba(19,20,24,0.9)]">
+    <Card className="overflow-hidden border border-neutral-800/60 bg-neutral-950 text-neutral-100 shadow-2xl dark:border-neutral-800 py-0 max-w-7xl mx-auto mb-8"
+      style={{
+        background:
+          'url(https://images.unsplash.com/photo-1653826531670-3a0ce374c725?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.2),_transparent_55%),radial-gradient(circle_at_bottom_right,_rgba(236,72,153,0.2),_transparent_45%)]" />
       <CardContent className="flex flex-col gap-8 p-6 sm:p-8 md:p-10 lg:p-12">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -178,7 +185,7 @@ function ReportHero({ search }: { search: MedicineSearchParsed }) {
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
                 {search.title || 'Medicine analysis overview'}
               </h1>
-              <p className="text-base text-muted-foreground sm:text-lg">
+              <p className="text-base text-neutral-200/90 sm:text-lg">
                 {search.summary || 'Structured insights for cross-referencing treatment decisions and safety cues.'}
               </p>
             </div>
@@ -189,18 +196,18 @@ function ReportHero({ search }: { search: MedicineSearchParsed }) {
                   Run another query
                 </Link>
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 text-primary">
                 <Stethoscope className="h-4 w-4" />
-                Share with care team
+                Share
               </Button>
             </div>
           </div>
           <div className="w-full max-w-xs rounded-3xl border border-border/70 bg-background/80 p-5 shadow-lg backdrop-blur-xl">
             <div className="space-y-4">
               <HeroStat icon={<Clock className="h-4 w-4" />} label="Generated" value={timestamp} />
-              <HeroStat icon={<Gauge className="h-4 w-4" />} label="Status" value="Ready" />
+              {/* <HeroStat icon={<Gauge className="h-4 w-4" />} label="Status" value="Ready" /> */}
               <HeroStat icon={<Pill className="h-4 w-4" />} label="Request" value={search.query} />
-              {duration ? <HeroStat icon={<Activity className="h-4 w-4" />} label="Completion" value={duration} /> : null}
+              {/* {duration ? <HeroStat icon={<Activity className="h-4 w-4" />} label="Completion" value={duration} /> : null} */}
             </div>
           </div>
         </div>

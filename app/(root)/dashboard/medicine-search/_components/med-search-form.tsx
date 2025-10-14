@@ -199,6 +199,7 @@ export default function MedSearchForm() {
               disabled={loading}>
               {loading ? 'Forming Response...' : 'Search'}
             </Button>
+            {/* // TODO: Make it like symptom drawer */}
             {searchType === 'disease' && <Button type="button" variant="secondary">List of diseases</Button>}
             {searchType === 'name' && <Button type="button" variant="secondary">List of medicines and drugs</Button>}
             {searchType === 'sideEffects' && <Button type="button" variant="secondary">List of common side effects</Button>}

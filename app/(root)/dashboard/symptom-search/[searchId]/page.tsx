@@ -1,7 +1,6 @@
-import FadeContent from '@/components/visuals/fade-content';
+import { WDContent, WDTrigger, WrapDrawer } from '@/components/common/wrap-drawer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { WrapDrawer, WDTrigger, WDContent } from '@/components/common/wrap-drawer';
 import {
   Card,
   CardContent,
@@ -12,7 +11,9 @@ import {
 } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import FadeContent from '@/components/visuals/fade-content';
 import SymptomSearch from '@/models/symptom-search';
+import { Condition, Medicine, ReliefIdea, WhenToSeekHelp } from '@/types/symptom-search';
 import dbConnect from '@/utils/db-conn';
 import {
   Activity,
@@ -20,38 +21,28 @@ import {
   ArrowRight,
   Bookmark,
   ClipboardList,
+  ClockIcon,
   Download,
   Droplet,
+  FlagIcon,
+  FlaskConical,
   Gauge,
   HeartPulse,
   Home,
   InfoIcon,
   MoreHorizontal,
-  Pill,
   Phone,
+  Pill,
   Plus,
   Share2,
   Shield,
+  ShieldAlertIcon,
   Sparkles,
   Stethoscope,
   Thermometer,
-  ClockIcon,
-  ShieldAlertIcon,
-  FlaskConical,
-  FlagIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { IoInformationOutline } from 'react-icons/io5';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
-import { Condition, Medicine, ReliefIdea, WhenToSeekHelp } from '@/types/symptom-search';
 import React from 'react';
 
 interface PageProps {
@@ -163,7 +154,7 @@ export default async function SymptomSearchResultPage({ params }: PageProps) {
     <section className="relative flex min-h-svh flex-col overflow-hidden text-neutral-900 dark:text-neutral-100">
       <div className="relative w-full px-2 md:px-4 py-8 lg:px-10 lg:py-10">
         <header className="relative mb-8">
-          <Card className="overflow-hidden border border-neutral-800/60 bg-neutral-950 text-neutral-100 shadow-2xl dark:border-neutral-800 py-0"
+          <Card className="overflow-hidden border border-neutral-800/60 bg-neutral-950 text-neutral-100 shadow-2xl dark:border-neutral-800 py-0 max-w-7xl mx-auto"
             style={{
               background:
                 'url(https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?w=800&amp;q=80)',

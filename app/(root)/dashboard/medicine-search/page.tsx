@@ -13,7 +13,59 @@ import { RecentSearch } from "@/types/recent-search";
 import { useQuery } from "@tanstack/react-query";
 import { ClockIcon, FileQuestionIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
-const MedSearchForm = dynamic(() => import('./_components/med-search-form'), { ssr: false });
+import { Skeleton } from '@/components/ui/skeleton';
+
+function MedSearchFormSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="lg:grid lg:grid-cols-3 gap-2">
+        <div className="space-y-3 p-1">
+          <div className="flex items-start gap-2">
+            <Skeleton className="h-8 w-8" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-40 hidden lg:block" />
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-2 p-1">
+          <Skeleton className="h-12 w-full" />
+        </div>
+      </div>
+
+      <div className="lg:grid lg:grid-cols-3 gap-2">
+        <div className="space-y-3 p-1">
+          <div className="flex items-start gap-2">
+            <Skeleton className="h-8 w-8" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-4 w-48 hidden lg:block" />
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-2 p-1">
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-10 w-24" />
+          <Skeleton className="h-10 w-40" />
+          <Skeleton className="h-10 w-48 hidden lg:block" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-5 w-36" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const MedSearchForm = dynamic(() => import('./_components/med-search-form'), {
+  ssr: false,
+  loading: MedSearchFormSkeleton,
+});
 
 const fetchRecentSearches = async (): Promise<RecentSearch[]> => {
   const response = await fetch('/api/v1/medicines/recent');
